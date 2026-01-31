@@ -1,8 +1,8 @@
-## Interface: 90002
+## Interface: 120001, 120000
 ## Title: SimpleGold
 ## Notes: Creates draggable money window for all your characters
-## Version: 5.9.1
-## Author: Schnoggo
+## Version: 6.0.0
+## Author: Schnoggo, Alexander Rühle
 ## Dependencies:
 ## SavedVariables: SimpleGoldGlobals
 ## SavedVariablesPerCharacter: SimpleGoldSavedVars
