@@ -1,12 +1,10 @@
-# ignore log files
+## Editor
+.vscode/
 *.log
-
-# OS generated files #
-######################
-.DS_Store
-ehthumbs.db
-Icon?
-Thumbs.db
 .idea/
 
-.svn/
+## OS
+.DS_Store
+
+## WoW Cache
+SavedVariables/
