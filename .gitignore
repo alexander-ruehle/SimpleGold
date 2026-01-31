@@ -1,6 +1,7 @@
 ## Editor
 .vscode/
 *.log
+.idea/
 
 ## OS
 .DS_Store
