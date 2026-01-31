@@ -358,39 +358,91 @@ function SimpleGold_StepBackground()
 
 
 
-  
+local function SimpleGold_FormatNumber(amount)
+  local locale = GetLocale()
+  local sep = ","
+
+  if locale == "deDE" or locale == "frFR" or locale == "esES" or locale == "itIT" then
+    sep = "."
+  end
+
+  local str = tostring(amount)
+  while true do
+    str, k = str:gsub("^(-?%d+)(%d%d%d)", "%1"..sep.."%2")
+    if k == 0 then break end
+  end
+  return str
+end  
 
 
 
 
 function SimpleGold_ShowTooltip()
-	local tooltipList ={};
-	local totalGold=0;
-	-- GameTooltip_SetDefaultAnchor(GameTooltip, SimpleGoldDisplayFrame);
-	GameTooltip:SetOwner(getglobal("SimpleGoldDisplayFrame") , "ANCHOR_CURSOR", -5, 5);
-	-- GameTooltip:SetOwner(owner, "anchor"[, +x, +y]);
-	--GameTooltip:AddLine("test", .6,1.0,.8); -- GameTooltip:AddLine(name, GameTooltip_UnitColor("player"));\
-	-- add up the gold for this realm:
-	if (SimpleGoldGlobals==nil) then
-		table.insert(tooltipList,"Gold Data Unavailable");
-	else
-		local thisRealmList=SimpleGoldGlobals[myPlayerRealm];
-		for k,v in pairs(thisRealmList) do
-			-- table.insert(tooltipList,k..'    '..string.format("%.4f",v/10000));
-			table.insert(tooltipList,{k,string.format("%.2f",v/10000)});
-			totalGold=totalGold+v;
-		end --thisRealmList
-		
-	end
-	if (#(tooltipList))>0 then
-		GameTooltip:AddLine("Total:   "..string.format("%.2f",totalGold/10000), .8, .8, 1.8);
-		for i = 1, #(tooltipList) do
-			-- GameTooltip:AddLine(tooltipList[i], .8, .8, 1.8);
-			GameTooltip:AddLine(tooltipList[i][1]..':   '..tooltipList[i][2], .8, .8, 1.8);
-		end -- for fieldCount
-	end
-	GameTooltip:Show();
+  local totalGold = 0
+
+  GameTooltip:SetOwner(SimpleGoldDisplayFrame, "ANCHOR_CURSOR", -5, 5)
+
+  if not SimpleGoldGlobals or not SimpleGoldGlobals[myPlayerRealm] then
+    GameTooltip:AddLine("Gold Data Unavailable", 1, 0.2, 0.2)
+    GameTooltip:Show()
+    return
+  end
+
+  local thisRealmList = SimpleGoldGlobals[myPlayerRealm]
+  local sortedChars = {}
+
+  -- Daten sammeln + Gesamtgold
+  for charName, gold in pairs(thisRealmList) do
+    totalGold = totalGold + gold
+    table.insert(sortedChars, {
+      name = charName,
+      gold = gold
+    })
+  end
+
+  -- Sortierung:
+  -- 1. Mehr Gold zuerst
+  -- 2. Bei Gleichstand alphabetisch
+  table.sort(sortedChars, function(a, b)
+    if a.gold == b.gold then
+      return a.name < b.name
+    end
+    return a.gold > b.gold
+  end)
+
+  -- Total anzeigen
+  local totalGoldFormatted = SimpleGold_FormatNumber(math.floor(totalGold / 10000))
+  GameTooltip:AddDoubleLine(
+    "Total",
+    totalGoldFormatted .. "g",
+    0.8, 0.8, 1,
+    1, 1, 1
+  )
+
+  GameTooltip:AddLine(" ")
+
+  -- Charaktere anzeigen
+  for _, entry in ipairs(sortedChars) do
+    local goldFormatted = SimpleGold_FormatNumber(math.floor(entry.gold / 10000))
+
+    GameTooltip:AddDoubleLine(
+      entry.name,
+      goldFormatted .. "g",
+      0.8, 0.8, 0.8,
+      1, 1, 1
+    )
+
+    -- rechtes Feld rechtsbündig setzen
+    local line = GameTooltip:NumLines()
+    local rightText = _G["GameTooltipTextRight" .. line]
+    if rightText then
+      rightText:SetJustifyH("RIGHT")
+    end
+  end
+
+  GameTooltip:Show()
 end
+
 
 function SimpleGold_HideTooltip()
 	GameTooltip:Hide();

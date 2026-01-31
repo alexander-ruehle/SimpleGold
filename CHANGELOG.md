@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.9.1] - 2020-11-17
+## [6.0.0] - 2020-11-17
 ### Changed
 - Updated TOC and version for WoW client 12.0.0 (Midnight Pre-Patch) and 12.0.1 (Midnight Release).
 
