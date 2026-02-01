@@ -1,125 +1,84 @@
 <!-- SimpleGold 6.0.0  -->
 
-
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
-
-
-
-<Frame
-	name="SimpleGold"
-	>
-	<Size>
-		<AbsDimension x="10" y="10"/>
-	</Size>
-	<Anchors>
-		<Anchor point="CENTER">
-			<Offset>
-				<AbsDimension x="0" y="0"/>
-			</Offset>
-		</Anchor>
-	</Anchors>
-
-	<Scripts>
-		<OnLoad>
-			SimpleGold_OnLoad(self);
-		</OnLoad>
-		<OnEvent>
-			SimpleGold_Event(self, event)
-		</OnEvent>
-	</Scripts>
-</Frame>
-
-
-
-
-
-<Frame name="SimpleGoldDisplayFrame"
-	toplevel="true"
-	parent="UIParent"
-	movable="true"
-	hidden="true"
-	frameStrata="HIGH" >
-	<Size x="170" y="18"/>
-	<Anchors>
-		<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" >
-			<Offset x="0" y="0"/>
-		</Anchor>
-	</Anchors>
-	<Frames>
-		<Frame name="SimpleGoldBack" setAllPoints="true" hidden="false">
-
-			<Layers>
-				<Layer level="BACKGROUND">
-					<Texture name="SimpleGold_BackgroundTexture" setAllPoints="true">
-					  <Color r="1.0" g="1.0" b="1.0" a="1.0" />
-					</Texture>
-      			</Layer>
-			</Layers>
-			<Frames>
-				<Frame name="SimpleGoldMoney" inherits="SmallMoneyFrameTemplate" hidden="false">
-					<Size x="0" y="26"/>
-					<Anchors>
-						<Anchor point="RIGHT" relativeTo="SimpleGoldDisplayFrame" relativePoint="RIGHT">
-							<Offset x="5" y="0"/>
-						</Anchor>
-					</Anchors>
-					<Scripts>
-
-
-					<OnLoad>
-						SmallMoneyFrame_OnLoad(self);
-						self.staticMoney = 0;
-						MoneyFrame_SetType(self,"STATIC");
-					</OnLoad>
-
-					</Scripts>
-				</Frame>
-			</Frames>
-			<Scripts>
-
-			</Scripts>
-		</Frame>
-	</Frames>
-	<Scripts>
-		<OnEnter>
-			SimpleGold_ShowTooltip();
-		</OnEnter>
-		<OnLeave>
-			SimpleGold_HideTooltip();
-		</OnLeave>
-		<OnMouseDown>
-			if ( IsShiftKeyDown() ) then
-				SimpleGold_StepBackground();
-			else
-				if (SimpleGoldSavedVars["locked"] == false) then
-          if button == "LeftButton" and not self.isMoving then
-            self:StartMoving();
-            self.isMoving = true;
-          end
+	<Frame name="SimpleGold">
+		<Size>
+			<AbsDimension x="10" y="10"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset>
+					<AbsDimension x="0" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnLoad>SimpleGold_OnLoad(self);</OnLoad>
+			<OnEvent>SimpleGold_Event(self, event)</OnEvent>
+		</Scripts>
+	</Frame>
+	<Frame name="SimpleGoldDisplayFrame" toplevel="true" parent="UIParent" movable="true" hidden="true" frameStrata="HIGH">
+		<Size x="170" y="18"/>
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER">
+				<Offset x="0" y="0"/>
+			</Anchor>
+		</Anchors>
+		<Frames>
+			<Frame name="SimpleGoldBack" setAllPoints="true" hidden="false">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture name="SimpleGold_BackgroundTexture" setAllPoints="true">
+							<Color r="1.0" g="1.0" b="1.0" a="1.0" />
+						</Texture>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Frame name="SimpleGoldMoney" inherits="SmallMoneyFrameTemplate" hidden="false">
+						<Size x="0" y="26"/>
+						<Anchors>
+							<Anchor point="RIGHT" relativeTo="SimpleGoldDisplayFrame" relativePoint="RIGHT">
+								<Offset x="5" y="0"/>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								SmallMoneyFrame_OnLoad(self);
+								self.staticMoney = 0;
+								MoneyFrame_SetType(self,"STATIC");
+							</OnLoad>
+						</Scripts>
+					</Frame>
+				</Frames>
+				<Scripts></Scripts>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnEnter>SimpleGold_ShowTooltip();</OnEnter>
+			<OnLeave>SimpleGold_HideTooltip();</OnLeave>
+			<OnMouseDown>
+				if ( IsShiftKeyDown() ) then
+					SimpleGold_StepBackground();
+				else
+					if (SimpleGoldSavedVars["locked"] == false) then
+						if button == "LeftButton" and not self.isMoving then
+							self:StartMoving();
+							self.isMoving = true;
+						end
+					end
 				end
-			end
-		</OnMouseDown>
-		<OnMouseUp>
-      if button == "LeftButton" and self.isMoving then
-        self:StopMovingOrSizing();
-        self.isMoving = false;
-        SimpleGoldSaveLastPosition();
-      end
-
-
-		</OnMouseUp>
-		<OnShow>
-			SimpleGoldPrefsFrameOnShow();
-		</OnShow>
-		<OnHide>
-
-		</OnHide>
-
-
-	</Scripts>
-</Frame>
-
-
-
+			</OnMouseDown>
+			<OnMouseUp>
+				if button == "LeftButton" and self.isMoving then
+					self:StopMovingOrSizing();
+					self.isMoving = false;
+					SimpleGoldSaveLastPosition();
+				end
+			</OnMouseUp>
+			<OnShow>SimpleGoldPrefsFrameOnShow();</OnShow>
+			<OnHide></OnHide>
+		</Scripts>
+	</Frame>
 </Ui>

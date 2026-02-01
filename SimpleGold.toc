@@ -6,6 +6,7 @@
 ## Dependencies:
 ## SavedVariables: SimpleGoldGlobals
 ## SavedVariablesPerCharacter: SimpleGoldSavedVars
+
 localization.lua
 SimpleGold.lua
 SimpleGold.xml
